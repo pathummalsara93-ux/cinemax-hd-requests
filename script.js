@@ -3,11 +3,11 @@ const submitBtn = form.querySelector('button');
 const liveRequests = document.getElementById('liveRequests');
 
 // GitHub Config
-const repoOwner = "pathummalsara93-ux";
-const repoName = "Database-";
+const repoOwner = "YOUR_GITHUB_USERNAME";
+const repoName = "YOUR_REPO_NAME";
 const filePath = "requests.json";
 const branch = "main";
-const token = "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"; // ⚠️ keep safe
+const token = "YOUR_PERSONAL_ACCESS_TOKEN"; // ⚠️ keep safe
 
 // Fetch latest requests from GitHub
 async function fetchRequests(){
