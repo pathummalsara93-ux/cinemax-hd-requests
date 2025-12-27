@@ -8,9 +8,9 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 // GitHub Config
-const GITHUB_TOKEN = "YOUR_PERSONAL_ACCESS_TOKEN";
-const OWNER = "YOUR_GITHUB_USERNAME";
-const REPO = "YOUR_REPO_NAME";
+const GITHUB_TOKEN = "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";
+const OWNER = "pathummalsara93-ux";
+const REPO = "Database-";
 const FILE_PATH = "requests.json";
 const BRANCH = "main";
 
