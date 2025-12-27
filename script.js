@@ -1,4 +1,4 @@
-// Firebase config
+// Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyB-AxFPA8bgzCirOBWow7yED5fJHajvSCs",
   authDomain: "cinemax-82ee1.firebaseapp.com",
@@ -18,7 +18,7 @@ const db = firebase.database();
 const form = document.getElementById('movieRequestForm');
 const submitBtn = form.querySelector('button');
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', function(e) {
     e.preventDefault();
 
     const movie = document.getElementById('movieName').value.trim();
@@ -30,12 +30,11 @@ form.addEventListener('submit', (e) => {
     submitBtn.style.opacity = "0.7";
     submitBtn.disabled = true;
 
-    // Push to Firebase
     db.ref('movieRequests').push({
         movieName: movie,
         language: lang,
         timestamp: Date.now()
-    }, (error) => {
+    }, function(error) {
         if (error) {
             alert("Error! කරුණාකර නැවත උත්සාහ කරන්න.");
             submitBtn.innerText = "SEND REQUEST 🎬";
@@ -43,6 +42,7 @@ form.addEventListener('submit', (e) => {
         } else {
             submitBtn.innerText = "SENT SUCCESSFULLY! ✅";
             submitBtn.style.background = "#25D366";
+
             setTimeout(() => {
                 submitBtn.innerText = "SEND REQUEST 🎬";
                 submitBtn.style.background = "#e50914";
@@ -56,7 +56,7 @@ form.addEventListener('submit', (e) => {
 
 // Live Wall
 const liveRequests = document.getElementById('liveRequests');
-db.ref('movieRequests').on('value', (snapshot) => {
+db.ref('movieRequests').on('value', function(snapshot) {
     liveRequests.innerHTML = '';
     const data = snapshot.val();
     if (data) {
