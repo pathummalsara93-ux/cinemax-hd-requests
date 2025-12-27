@@ -6,7 +6,8 @@
     <title>CINEMAX HD - Movie Requests</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Firebase -->
+
+    <!-- Firebase Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
@@ -17,6 +18,7 @@
             <p class="subtitle">Official Movie Request Center</p>
         </header>
         
+        <!-- Movie Request Form -->
         <section class="form-section">
             <form id="movieRequestForm">
                 <div class="form-group">
@@ -37,6 +39,7 @@
             </form>
         </section>
 
+        <!-- Live Wall -->
         <section class="wall-section">
             <h2 class="section-title">📊 Recent Requests (Live Wall)</h2>
             <div class="wall-wrapper">
@@ -45,6 +48,7 @@
             <p class="info-text">*නව රික්වෙස්ට් පෙනීමට විනාඩි කිහිපයකි.</p>
         </section>
 
+        <!-- Group Links -->
         <section class="group-section">
             <h2 class="section-title">📍 Join Our Categories</h2>
             <div class="group-card">
@@ -77,6 +81,7 @@
             </div>
         </section>
 
+        <!-- Admins -->
         <section class="admin-section">
             <h2 class="section-title">🛡️ Management Team</h2>
             <div class="admin-card owner">
@@ -101,6 +106,8 @@
             <p>© 2025 CINEMAX HD. All Rights Reserved.</p>
         </footer>
     </div>
+
+    <!-- Firebase Form Script -->
     <script src="script.js"></script>
 </body>
 </html>
