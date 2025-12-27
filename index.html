@@ -3,50 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CINEMAX HD - Movie Request</title>
+    <title>CINEMAX HD - Movie Requests</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="container">
-        <img src="https://img.icons8.com/color/96/000000/movie-projector.png" alt="Logo">
-        <h1>CINEMAX HD</h1>
-        <h3>Movie Request Center</h3>
-        <p>ඔබට අවශ්‍ය චිත්‍රපටයේ නම, වසර සහ භාෂාව ඇතුළත් කර අප වෙත එවන්න.</p>
+        <header>
+            <h1 class="logo">CINEMAX <span>HD</span></h1>
+            <p class="subtitle">Official Movie Request Center</p>
+        </header>
+        
+        <section class="form-section">
+            <form id="movieRequestForm">
+                <div class="form-group">
+                    <label>Movie Name / චිත්‍රපටයේ නම:</label>
+                    <input type="text" id="movieName" placeholder="Ex: Avatar: The Way of Water" required>
+                </div>
+                <div class="form-group">
+                    <label>Language / භාෂාව:</label>
+                    <select id="language">
+                        <option>Sinhala (Sub/Dub)</option>
+                        <option>English</option>
+                        <option>Hindi</option>
+                        <option>Tamil</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-glow">SEND REQUEST 🎬</button>
+            </form>
+        </section>
 
-        <form id="movieRequestForm">
-            <div class="form-group">
-                <label for="movieName">චිත්‍රපටයේ නම:</label>
-                <input type="text" id="movieName" name="movieName" required>
+        <section class="wall-section">
+            <h2 class="section-title">📊 Recent Requests (Live Wall)</h2>
+            <div class="wall-wrapper">
+                <ul id="liveRequests" style="list-style:none; padding:10px; margin:0;"></ul>
             </div>
-            <div class="form-group">
-                <label for="releaseYear">නිකුත් වූ වසර:</label>
-                <input type="number" id="releaseYear" name="releaseYear" min="1900" max="2099">
-            </div>
-            <div class="form-group">
-                <label for="language">භාෂාව:</label>
-                <select id="language" name="language">
-                    <option value="Sinhala">සිංහල</option>
-                    <option value="English">ඉංග්‍රීසි</option>
-                    <option value="Tamil">දෙමළ</option>
-                    <option value="Hindi">හින්දි</option>
-                    <option value="Other">වෙනත්</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="requesterName">ඔබගේ නම / Telegram/WhatsApp Name:</label>
-                <input type="text" id="requesterName" name="requesterName">
-            </div>
-            <button type="submit" class="btn">REQUEST MOVIE 🎬</button>
-        </form>
+            <p class="info-text">*නව රික්වෙස්ට් පෙනීමට විනාඩි කිහිපයකි.</p>
+        </section>
 
-        <p class="join-us">අපගේ WhatsApp සමූහයට එකතු වන්න:</p>
-        <a href="https://whatsapp.com/channel/0029Vb6oAn2EquiVw3u3Y63q" target="_blank" class="whatsapp-link">Join CINEMAX HD WhatsApp Channel</a>
+        <section class="group-section">
+            <h2 class="section-title">📍 Join Our Categories</h2>
+            <div class="group-card">
+                <div class="group-info">
+                    <span class="category">Movie Only 🎬</span>
+                    <span class="title">Community Link</span>
+                </div>
+                <a href="https://chat.whatsapp.com/JbkNkthbyHVJhBdGGiPnLN?mode=wwt" class="join-btn">JOIN US</a>
+            </div>
+            <div class="group-card">
+                <div class="group-info">
+                    <span class="category">Movie Only 🎬</span>
+                    <span class="title">Group Link</span>
+                </div>
+                <a href="https://chat.whatsapp.com/J3naslGyDDyGtHHQyAVQpW" class="join-btn">JOIN US</a>
+            </div>
+            <div class="group-card">
+                <div class="group-info">
+                    <span class="category">TV-Series Only 📺</span>
+                    <span class="title">TV-Series Community</span>
+                </div>
+                <a href="https://chat.whatsapp.com/IcjVWaOg52IJaX75pAQJr2" class="join-btn">JOIN US</a>
+            </div>
+            <div class="group-card channel-card">
+                <div class="group-info">
+                    <span class="category">Official Channel 📢</span>
+                    <span class="title">Follow Our Updates</span>
+                </div>
+                <a href="https://whatsapp.com/channel/0029Vb6oAn2EquiVw3u3Y63q/184" class="follow-btn">FOLLOW US</a>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2 class="section-title">🛡️ Management Team</h2>
+            <div class="admin-card owner">
+                <div class="admin-icon">👤</div>
+                <div class="admin-info">
+                    <span class="role">Group Owner</span>
+                    <span class="name">Kavindu Kaushalya</span>
+                </div>
+                <a href="https://wa.me/94760595208" class="wa-btn">🥏 Contact</a>
+            </div>
+            <div class="admin-card">
+                <div class="admin-icon">👮</div>
+                <div class="admin-info">
+                    <span class="role">Group Admin</span>
+                    <span class="name">Nulanga Sathsidu</span>
+                </div>
+                <a href="https://wa.me/94762986758" class="wa-btn">🥏 Contact</a>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 CINEMAX HD. All Rights Reserved.</p>
+        </footer>
     </div>
-
-    <div class="footer">
-        Developed for CINEMAX HD Community
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
