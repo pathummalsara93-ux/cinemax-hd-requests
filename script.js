@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB-AxFPA8bgzCirOBWow7yED5fJHajvSCs",
   authDomain: "cinemax-82ee1.firebaseapp.com",
@@ -10,15 +10,15 @@ const firebaseConfig = {
   measurementId: "G-RV14TYHZ23"
 };
 
-// Firebase initialization
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const db = firebase.database();
 
 // Form submit
 const form = document.getElementById('movieRequestForm');
 const submitBtn = form.querySelector('button');
 
-form.addEventListener('submit', function(e) {
+form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const movie = document.getElementById('movieName').value.trim();
@@ -26,17 +26,16 @@ form.addEventListener('submit', function(e) {
 
     if (!movie) return;
 
-    // Button UI update
     submitBtn.innerText = "SENDING... ⏳";
     submitBtn.style.opacity = "0.7";
     submitBtn.disabled = true;
 
-    // Push data to Firebase Realtime Database
-    firebase.database().ref('movieRequests').push({
+    // Push to Firebase
+    db.ref('movieRequests').push({
         movieName: movie,
         language: lang,
         timestamp: Date.now()
-    }, function(error) {
+    }, (error) => {
         if (error) {
             alert("Error! කරුණාකර නැවත උත්සාහ කරන්න.");
             submitBtn.innerText = "SEND REQUEST 🎬";
@@ -44,7 +43,6 @@ form.addEventListener('submit', function(e) {
         } else {
             submitBtn.innerText = "SENT SUCCESSFULLY! ✅";
             submitBtn.style.background = "#25D366";
-
             setTimeout(() => {
                 submitBtn.innerText = "SEND REQUEST 🎬";
                 submitBtn.style.background = "#e50914";
@@ -58,12 +56,9 @@ form.addEventListener('submit', function(e) {
 
 // Live Wall
 const liveRequests = document.getElementById('liveRequests');
-const requestsRef = firebase.database().ref('movieRequests');
-
-requestsRef.on('value', (snapshot) => {
+db.ref('movieRequests').on('value', (snapshot) => {
     liveRequests.innerHTML = '';
     const data = snapshot.val();
-
     if (data) {
         const entries = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
         entries.forEach(req => {
