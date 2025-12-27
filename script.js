@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB-AxFPA8bgzCirOBWow7yED5fJHajvSCs",
   authDomain: "cinemax-82ee1.firebaseapp.com",
