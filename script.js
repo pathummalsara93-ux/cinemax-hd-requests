@@ -7,7 +7,7 @@ const repoOwner = "pathummalsara93-ux";
 const repoName = "cinemax-hd-requests";
 const filePath = "requests.json";
 const branch = "main";
-const token = "YOUR_PERSONAL_ACCESS_TOKEN"; // ⚠️ keep safe
+const token = "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"; // ⚠️ keep safe
 
 // Fetch latest requests from GitHub
 async function fetchRequests(){
