@@ -9,7 +9,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 // MongoDB URL
-const MONGO_URL = "YOUR_MONGODB_CONNECTION_STRING_HERE";
+const MONGO_URL = "mongodb+srv://SithumKalhara:97531@cluster0.iva7dbo.mongodb.net/?retryWrites=true&w=majority";
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
