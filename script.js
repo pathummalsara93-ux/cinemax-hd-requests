@@ -1,71 +1,85 @@
-// Firebase Config
+// script.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD0szKaFT1THw5HaR3--uE4o3Il8TlxTlo",
-  authDomain: "chatforall-86963.firebaseapp.com",
-  projectId: "chatforall-86963",
-  storageBucket: "chatforall-86963.appspot.com",
-  messagingSenderId: "968673332926",
-  appId: "1:968673332926:web:6789623a796a769924d8ef",
-  measurementId: "G-WX4SKF94PX"
+  apiKey: "AIzaSyB-AxFPA8bgzCirOBWow7yED5fJHajvSCs",
+  authDomain: "cinemax-82ee1.firebaseapp.com",
+  databaseURL: "https://cinemax-82ee1-default-rtdb.firebaseio.com/",
+  projectId: "cinemax-82ee1",
+  storageBucket: "cinemax-82ee1.appspot.com",
+  messagingSenderId: "256670616410",
+  appId: "1:256670616410:web:a2682c387c33f32dae8163",
+  measurementId: "G-RV14TYHZ23"
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-// Form submission
-document.getElementById('movieRequestForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+// --------- Form Submit ---------
+const form = document.getElementById('movieRequestForm');
+const submitBtn = form.querySelector('button');
 
-    const submitBtn = e.target.querySelector('button');
-    const movie = document.getElementById('movieName').value.trim();
-    const lang = document.getElementById('language').value;
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-    if(!movie) return;
+  const movie = document.getElementById('movieName').value.trim();
+  const lang = document.getElementById('language').value;
 
-    submitBtn.innerText = "SENDING... ⏳";
-    submitBtn.style.opacity = "0.7";
-    submitBtn.disabled = true;
+  if (!movie) return;
 
-    // Firebase push
-    db.ref('movieRequests').push({
-        movieName: movie,
-        language: lang,
-        timestamp: Date.now()
-    }).then(() => {
-        submitBtn.innerText = "SENT SUCCESSFULLY! ✅";
-        submitBtn.style.background = "#25D366";
+  // Button UI update
+  submitBtn.innerText = "SENDING... ⏳";
+  submitBtn.style.opacity = "0.7";
+  submitBtn.disabled = true;
 
-        setTimeout(() => {
-            submitBtn.innerText = "SEND REQUEST 🎬";
-            submitBtn.style.background = "#e50914";
-            submitBtn.style.opacity = "1";
-            submitBtn.disabled = false;
-            document.getElementById('movieRequestForm').reset();
-        }, 2000);
-    }).catch((err) => {
-        alert("Error! කරුණාකර නැවත උත්සාහ කරන්න.");
-        submitBtn.innerText = "SEND REQUEST 🎬";
-        submitBtn.disabled = false;
-    });
+  // Push data to Firebase Realtime Database
+  push(ref(db, 'movieRequests'), {
+    movieName: movie,
+    language: lang,
+    timestamp: Date.now()
+  })
+  .then(() => {
+    submitBtn.innerText = "SENT SUCCESSFULLY! ✅";
+    submitBtn.style.background = "#25D366"; // green color
+
+    setTimeout(() => {
+      submitBtn.innerText = "SEND REQUEST 🎬";
+      submitBtn.style.background = "#e50914"; // red color
+      submitBtn.style.opacity = "1";
+      submitBtn.disabled = false;
+      form.reset();
+    }, 3000);
+  })
+  .catch((error) => {
+    alert("Error! කරුණාකර නැවත උත්සාහ කරන්න.");
+    submitBtn.innerText = "SEND REQUEST 🎬";
+    submitBtn.disabled = false;
+  });
 });
 
-// Real-time wall update
+// --------- Live Wall ---------
 const liveRequests = document.getElementById('liveRequests');
+const requestsRef = ref(db, 'movieRequests');
 
-db.ref('movieRequests').on('value', snapshot => {
-    liveRequests.innerHTML = '';
-    const data = snapshot.val();
-    if(data){
-        const entries = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
-        entries.forEach(req => {
-            const li = document.createElement('li');
-            li.textContent = `🎬 ${req.movieName} - ${req.language}`;
-            li.style.padding = "8px";
-            li.style.borderBottom = "1px solid #333";
-            liveRequests.appendChild(li);
-        });
-    } else {
-        liveRequests.innerHTML = '<li style="padding:8px; color:#888;">No requests yet.</li>';
-    }
+onValue(requestsRef, (snapshot) => {
+  liveRequests.innerHTML = '';
+  const data = snapshot.val();
+
+  if (data) {
+    // Sort by timestamp descending
+    const entries = Object.values(data).sort((a,b)=>b.timestamp - a.timestamp);
+
+    entries.forEach(req => {
+      const li = document.createElement('li');
+      li.textContent = `🎬 ${req.movieName} - ${req.language}`;
+      li.style.color = 'white';
+      li.style.padding = '8px';
+      liveRequests.appendChild(li);
+    });
+  } else {
+    liveRequests.innerHTML = '<li style="color:#888;">No requests yet</li>';
+  }
 });
