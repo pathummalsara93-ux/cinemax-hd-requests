@@ -1,53 +1,71 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('movieRequestForm');
+// Firebase Config
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Form එක submit වීම නවත්වනවා
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-        // Form fields වලින් data එකතු කරගන්නවා
-        const movieName = document.getElementById('movieName').value;
-        const releaseYear = document.getElementById('releaseYear').value;
-        const language = document.getElementById('language').value;
-        const requesterName = document.getElementById('requesterName').value;
+// Form submission
+document.getElementById('movieRequestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        // මෙතනදී ඔබට request එකක් server එකකට යවන්න පුළුවන්.
-        // දැනට අපි සරල alert එකක් පෙන්වමු.
+    const submitBtn = e.target.querySelector('button');
+    const movie = document.getElementById('movieName').value.trim();
+    const lang = document.getElementById('language').value;
 
-        const requestDetails = `
-            Movie Request Received!
-            ------------------------
-            Movie Name: ${movieName}
-            Release Year: ${releaseYear || 'N/A'}
-            Language: ${language}
-            Requester: ${requesterName || 'Anonymous'}
-        `;
+    if(!movie) return;
 
-        alert(requestDetails); // තාවකාලිකව alert එකක් පෙන්වයි
+    submitBtn.innerText = "SENDING... ⏳";
+    submitBtn.style.opacity = "0.7";
+    submitBtn.disabled = true;
 
-        // ඔබට Form එක clear කිරීමට අවශ්‍ය නම්
-        form.reset();
+    // Firebase push
+    db.ref('movieRequests').push({
+        movieName: movie,
+        language: lang,
+        timestamp: Date.now()
+    }).then(() => {
+        submitBtn.innerText = "SENT SUCCESSFULLY! ✅";
+        submitBtn.style.background = "#25D366";
 
-        // සැබෑ Request එකක් යවන්නේ කෙසේද? (උදාහරණ)
-        // 1. Google Form එකකට Redirect කරන්න:
-        //    window.open('ඔබේ_GOOGLE_FORM_LINK_එක_මෙතැනට_දමන්න', '_blank');
-        // 2. Formspree වැනි සේවාවක් භාවිතා කරන්න:
-        //    const formData = new FormData(form);
-        //    fetch('https://formspree.io/f/your_form_id', {
-        //        method: 'POST',
-        //        body: formData,
-        //        headers: {
-        //            'Accept': 'application/json'
-        //        }
-        //    }).then(response => {
-        //        if (response.ok) {
-        //            alert('Your request has been sent!');
-        //            form.reset();
-        //        } else {
-        //            alert('There was an error sending your request.');
-        //        }
-        //    }).catch(error => {
-        //        console.error('Error:', error);
-        //        alert('An error occurred.');
-        //    });
+        setTimeout(() => {
+            submitBtn.innerText = "SEND REQUEST 🎬";
+            submitBtn.style.background = "#e50914";
+            submitBtn.style.opacity = "1";
+            submitBtn.disabled = false;
+            document.getElementById('movieRequestForm').reset();
+        }, 2000);
+    }).catch((err) => {
+        alert("Error! කරුණාකර නැවත උත්සාහ කරන්න.");
+        submitBtn.innerText = "SEND REQUEST 🎬";
+        submitBtn.disabled = false;
     });
+});
+
+// Real-time wall update
+const liveRequests = document.getElementById('liveRequests');
+
+db.ref('movieRequests').on('value', snapshot => {
+    liveRequests.innerHTML = '';
+    const data = snapshot.val();
+    if(data){
+        const entries = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
+        entries.forEach(req => {
+            const li = document.createElement('li');
+            li.textContent = `🎬 ${req.movieName} - ${req.language}`;
+            li.style.padding = "8px";
+            li.style.borderBottom = "1px solid #333";
+            liveRequests.appendChild(li);
+        });
+    } else {
+        liveRequests.innerHTML = '<li style="padding:8px; color:#888;">No requests yet.</li>';
+    }
 });
