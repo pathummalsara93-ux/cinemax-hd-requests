@@ -3,8 +3,8 @@ const submitBtn = form.querySelector('button');
 const liveRequests = document.getElementById('liveRequests');
 
 // GitHub Config
-const repoOwner = "YOUR_GITHUB_USERNAME";
-const repoName = "YOUR_REPO_NAME";
+const repoOwner = "pathummalsara93-ux";
+const repoName = "cinemax-hd-requests";
 const filePath = "requests.json";
 const branch = "main";
 const token = "YOUR_PERSONAL_ACCESS_TOKEN"; // ⚠️ keep safe
